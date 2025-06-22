@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+ 
+</head>
+<body>
+    
+    <div class="sidebar">
+        <h3 class="px-3">University System</h3>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="#dashboard">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#students">
+                    <i class="bi bi-people"></i> Students
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#courses">
+                    <i class="bi bi-journal-text"></i> Courses
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#enrollment">
+                    <i class="bi bi-person-check"></i> Enrollment
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#search">
+                    <i class="bi bi-search"></i> Search
+                </a>
+            </li>
+ 
+        </ul>
+    </div>
+
+ 
+    <div class="main-content">
+
+
+        
+
+
+        <div id="dashboard" class="section">
+        <div class="container py-4">
+            <div class="background-container">
+                <div class="background-overlay">
+                    <div class="two-tone-heading">
+
+                  <h1>University Management System</h1>
+                    </div>
+                </div>
+              </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row justify-content-center button-navbar">
+               
+                <div class="col-md-2 col-sm-4 col-6 mb-3">
+                    <a href="#dashboard" class="nav-button dashboard active">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                
+                
+                <div class="col-md-2 col-sm-4 col-6 mb-3">
+                    <a href="#students" class="nav-button students">
+                        <i class="bi bi-people"></i>
+                        <span>Students</span>
+                    </a>
+                </div>
+                
+              
+                <div class="col-md-2 col-sm-4 col-6 mb-3">
+                    <a href="#courses" class="nav-button courses">
+                        <i class="bi bi-journal-text"></i>
+                        <span>Courses</span>
+                    </a>
+                </div>
+            
+                <div class="col-md-2 col-sm-4 col-6 mb-3">
+                    <a href="#enrollment" class="nav-button enrollment">
+                        <i class="bi bi-person-check"></i>
+                        <span>Enrollment</span>
+                    </a>
+                </div>
+               
+                <div class="col-md-2 col-sm-4 col-6 mb-3">
+                    <a href="#search" class="nav-button search">
+                        <i class="bi bi-search"></i>
+                        <span>Search</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+            
+         
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+           
+            <div class="row">
+                
+                <div class="col-md-6">
+                    <div class="form-section">
+                        <h3><i class="bi bi-person-plus"></i> Add New Student</h3>
+                        <form action="/add_student" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label class="form-label">Age</label>
+                                    <input type="number" name="age" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">GPA</label>
+                                    <input type="number" step="0.1" name="gpa" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Department</label>
+                                    <input type="text" name="department" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Grades (comma separated)</label>
+                                <input type="text" name="grades" class="form-control" placeholder="85,90,78" required>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label class="form-label">City</label>
+                                    <input type="text" name="city" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Country</label>
+                                    <input type="text" name="country" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" name="active" class="form-check-input" id="activeCheck">
+                                <label class="form-check-label" for="activeCheck">Active Student</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Student</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Add Course -->
+                <div class="col-md-6">
+                    <div class="form-section">
+                        <h3><i class="bi bi-journal-plus"></i> Add New Course</h3>
+                        <form action="/add_course" method="POST">
+                            <div class="mb-3">
+                                <label class="form-label">Course Title</label>
+                                <input type="text" name="title" class="form-control" required>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <label class="form-label">Credit Hours</label>
+                                    <input type="number" name="credits" class="form-control" required>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Department</label>
+                                    <input type="text" name="department" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Enrolled Students (comma separated)</label>
+                                <input type="text" name="enrolled_students" class="form-control" placeholder="Salma,Sama">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Professor (or professors if more than one, comma separated)</label>
+                                <input type="text" name="doctor" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Course</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+            <br>
+            <br>
+            <hr>
+            <br>
+            <br>
+
+            
+
+
+
+            <div id="student-filter" class="container py-4">
+                <h4 class="mb-3">Filter Students by Department and Course</h4>
+            
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <select id="department" class="form-select">
+                            <option value="">Select Department</option>
+                             
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="course" class="form-select">
+                            <option value="">Select Course</option>
+                          
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button onclick="fetchFilteredStudents()" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </div>
+            
+                <div id="results">
+                    
+                </div>
+            </div>
+            
+            <script>
+               
+                function loadDepartments() {
+                    fetch('/api/departments')   
+                        .then(res => res.json())
+                        .then(data => {
+                            const departmentSelect = document.getElementById("department");
+                            data.forEach(department => {
+                                const option = document.createElement("option");
+                                option.value = department.name;
+                                option.textContent = department.name;
+                                departmentSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            console.error("Error fetching departments:", error);
+                            alert("Failed to load departments.");
+                        });
+                }
+            
+               
+                function loadCourses(department) {
+                    fetch(`/api/courses?department=${department}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const courseSelect = document.getElementById("course");
+                            courseSelect.innerHTML = '<option value="">Select Course</option>';  
+                            data.forEach(course => {
+                                const option = document.createElement("option");
+                                option.value = course.title;
+                                option.textContent = course.title;
+                                courseSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            console.error("Error fetching courses:", error);
+                            alert("Failed to load courses.");
+                        });
+                }
+            
+                function fetchFilteredStudents() {
+                    const department = document.getElementById("department").value;
+                    const course = document.getElementById("course").value;
+                
+                    fetch(`/students/by-department-and-course?department=${encodeURIComponent(department)}&course=${encodeURIComponent(course)}`)
+                        .then(response => {
+                            if (!response.ok) throw new Error(`Network Error: ${response.status}`);
+                            return response.json();
+                        })
+                        .then(responseData => {
+                            
+                            if (!Array.isArray(responseData)) {
+                                throw new Error("Invalid data format");
+                            }
+                            
+                            const allStudents = responseData;   
+                            
+                
+                            let html = '';
+                            if (allStudents.length === 0) {
+                                html = '<div class="alert alert-warning">No students found in this course.</div>';
+                            } else {
+                                html = `
+                                    <table class="table table-hover table-bordered">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Department</th>
+                                                <th>GPA</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${allStudents.map(student => `
+                                                <tr>
+                                                    <td>${student.name}</td>
+                                                    <td>${student.department}</td>
+                                                    <td>${student.gpa?.toFixed(2) || 'N/A'}</td>
+                                                    <td>${student.active ? '<span class="text-success">Active</span>' : '<span class="text-danger">Inactive</span>'}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                `;
+                            }
+                            document.getElementById("results").innerHTML = html;
+                        })
+                        .catch(error => {
+                            console.error("Fetch Error:", error);
+                            document.getElementById("results").innerHTML = `
+                                <div class="alert alert-danger">
+                                    Error: ${error.message || "Unknown error"}
+                                </div>
+                            `;
+                        });
+                }
+                
+                
+                
+                
+        
+                window.onload = function() {
+                    loadDepartments();
+            
+                    
+                    document.getElementById("department").addEventListener("change", function() {
+                        const department = this.value;
+                        if (department) {
+                            loadCourses(department);
+                        } else {
+                            document.getElementById("course").innerHTML = '<option value="">Select Course</option>';
+                        }
+                    });
+                };
+            </script>
+            
+            <div class="container">
+                <h2 class="text-center"></h2>
+              
+          
+                <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+                    <a href="javascript:void(0);" class="btn btn-danger shadow rounded-pill px-4 py-2" onclick="loadAtRiskStudents()">Show At Risk Students</a>
+                    <button class="btn btn-primary shadow rounded-pill px-4 py-2" onclick="loadCourseCounts()">Load Courses</button>
+                    <button class="btn btn-success shadow rounded-pill px-4 py-2" onclick="fetchStudents()">Show Students by Department</button>
+                </div>
+  
+              
+           
+                <div id="at-risk-table" style="display: none;">
+                  <h3>At Risk Students (GPA < 2 or Inactive)</h3>
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>GPA</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="at-risk-body"></tbody>
+                  </table>
+                </div>
+              
+                
+                <div id="students-container"></div>
+              
+          
+                <table id="course-table" class="table table-bordered table-striped table-hover" style="display: none;">
+                  <thead>
+                    <tr>
+                      <th>Course</th>
+                      <th>Number of Students</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              
+           
+              <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+              <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+              
+              <script>
+               
+                function loadAtRiskStudents() {
+                  fetch("/at_risk_students")
+                    .then(response => response.json())
+                    .then(students => {
+                        const allStudents = students;
+              
+                      if (data.length === 0) {
+                        tbody.innerHTML = "<tr><td colspan='5'>No at-risk students found.</td></tr>";
+                      } else {
+                        data.forEach(student => {
+                          const row = `
+                            <tr>
+                              <td>${student.name}</td>
+                              <td>${student.age}</td>
+                              <td>${student.gpa}</td>
+                              <td>${student.department}</td>
+                              <td>${student.active ? "Active" : "Inactive"}</td>
+                            </tr>`;
+                          tbody.innerHTML += row;
+                        });
+                      }
+              
+                      document.getElementById("at-risk-table").style.display = "block";
+                    })
+                    .catch(error => {
+                      console.error("Error loading at-risk students:", error);
+                      alert("An error occurred while loading the students.");
+                    });
+                }
+              
+
+               
+                async function fetchStudents() {
+                  const response = await fetch('/students/by-department');
+                  const result = await response.json();
+              
+                  const container = document.getElementById('students-container');
+                  container.innerHTML = '';
+              
+                  if (result.status === 'success') {
+                    result.data.forEach(dept => {
+                      const deptDiv = document.createElement('div');
+                      deptDiv.classList.add('mb-4');
+                      deptDiv.innerHTML = `<h5>Department: ${dept._id}</h5>`;
+              
+                      const table = document.createElement('table');
+                      table.classList.add('table', 'table-bordered');
+              
+                      table.innerHTML = `
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>GPA</th>
+                            <th>Active</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          ${dept.students.map(s => `
+                            <tr>
+                              <td>${s.name}</td>
+                              <td>${s.age}</td>
+                              <td>${s.gpa}</td>
+                              <td>${s.active ? 'Yes' : 'No'}</td>
+                            </tr>
+                          `).join('')}
+                        </tbody>
+                      `;
+                      deptDiv.appendChild(table);
+                      container.appendChild(deptDiv);
+                    });
+                  } else {
+                    container.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+                  }
+                }
+              
+               
+                function loadCourseCounts() {
+                  fetch("/course_student_counts")
+                    .then(response => response.json())
+                    .then(data => {
+                      const table = document.getElementById("course-table");
+                      const tbody = table.querySelector("tbody");
+                      tbody.innerHTML = "";
+              
+                      data.forEach(entry => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                          <td>${entry.course}</td>
+                          <td>${entry.student_count}</td>
+                        `;
+                        tbody.appendChild(row);
+                      });
+              
+                      table.style.display = "table";
+                    })
+                    .catch(err => {
+                      console.error("Failed to load course data:", err);
+                    });
+                }
+              </script>
+              
+
+            
+
+            <br>
+            <br>
+            <hr>
+            <br>
+            <br>
+
+
+ 
+            <div class="form-section">
+                <h3><i class="bi bi-person-check"></i> Enroll Student in Course</h3>
+                <form action="/enroll_student" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Student Name</label>
+                            <input type="text" name="student_name" class="form-control mb-3" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Course Title</label>
+                            <input type="text" name="course_title" class="form-control mb-3" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Enroll</button>
+                </form>
+            </div>
+
+            <!-- Display Data -->
+            <div class="row mt-4">
+                <!-- Students Table -->
+
+                <br>
+                <br>
+                <hr>
+                <br>
+                <br>
+ 
+
+                 
+<!-- Students Table -->
+<div id="students" section>
+    <div class="col-12 table-container">
+        <h3><i class="bi bi-people"></i> Students</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>GPA</th>
+                        <th>Department</th>  
+                        <th>Status</th>
+                        <th>Total Grade</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.age }}</td>
+                        <td>{{ student.gpa if 'gpa' in student else student.gba }}</td>
+                        <td>{{ student.department }}</td>  
+                        <td>{% if student.active %}Active{% else %}Inactive{% endif %}</td>
+                        <td>{{ student.totalGrade if 'totalGrade' in student else 'N/A' }}</td>
+                        <td class="action-btns">
+                            <a href="#editStudentModal-{{ student._id }}" class="btn btn-sm btn-warning" data-bs-toggle="modal">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form action="/delete_student/{{ student._id }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                         
+
+                    </tr>
+ 
+<div class="modal fade" id="editStudentModal-{{ student._id }}" tabindex="-1" 
+aria-labelledby="editStudentModalLabel-{{ student._id }}" aria-hidden="true">
+<div class="modal-dialog">
+   <div class="modal-content">
+    <form method="POST" action="/update_student/{{ student._id }}">
+
+           <input type="hidden" name="student_id" value="{{ student._id }}">
+           <div class="modal-header">
+               <h5 class="modal-title" id="editStudentModalLabel-{{ student._id }}">
+                   Edit Student Data
+               </h5>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" 
+                       aria-label="Close"></button>
+           </div>
+           <div class="modal-body">
+               <div class="mb-3">
+                   <label for="studentName-{{ student._id }}" class="form-label">Name</label>
+                   <input type="text" class="form-control" 
+                          id="studentName-{{ student._id }}" 
+                          name="name" value="{{ student.name }}">
+               </div>
+               <div class="mb-3">
+                   <label for="studentAge-{{ student._id }}" class="form-label">Age</label>
+                   <input type="number" class="form-control" 
+                          id="studentAge-{{ student._id }}" 
+                          name="age" value="{{ student.age }}">
+               </div>
+               <div class="mb-3">
+                   <label for="studentGPA-{{ student._id }}" class="form-label">GPA</label>
+                   <input type="number" step="0.01" class="form-control" 
+                          id="studentGPA-{{ student._id }}" 
+                          name="gpa" value="{{ student.gpa }}">
+               </div>
+               <div class="mb-3">
+                   <label for="studentDepartment-{{ student._id }}" class="form-label">Department</label>
+                   <input type="text" class="form-control" 
+                          id="studentDepartment-{{ student._id }}" 
+                          name="department" value="{{ student.department }}">
+               </div>
+               <div class="mb-3">
+                   <label for="studentActive-{{ student._id }}" class="form-label">Status</label>
+                   <select class="form-select" name="active" id="studentActive-{{ student._id }}">
+                       <option value="True" {% if student.active %}selected{% endif %}>Active</option>
+                       <option value="False" {% if not student.active %}selected{% endif %}>Inactive</option>
+                   </select>
+               </div>
+               <div class="mb-3">
+                   <label for="studentCity-{{ student._id }}" class="form-label">City</label>
+                   <input type="text" class="form-control" 
+                          id="studentCity-{{ student._id }}" 
+                          name="city" value="{{ student.address.city }}">
+               </div>
+               <div class="mb-3">
+                   <label for="studentCountry-{{ student._id }}" class="form-label">Country</label>
+                   <input type="text" class="form-control" 
+                          id="studentCountry-{{ student._id }}" 
+                          name="country" value="{{ student.address.country }}">
+               </div>
+           </div>
+           <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               <button type="submit" class="btn btn-primary">Save changes</button>
+           </div>
+       </form>
+   </div>
+</div>
+</div>
+
+        {% endfor %}
+
+
+        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> 
+
+
+<!-- Courses Table -->
+<div id="courses" class="col-12 table-container">
+    <h3><i class="bi bi-journal-text"></i> Courses</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Credits</th>
+                    <th>Department</th>
+                    <th>Professor</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.title }}</td>
+                    <td>{{ course.credits }}</td>
+                    <td>{{ course.department }}</td>
+                    <td>
+                        {% if course.Doctor is string %}
+                            {{ course.Doctor }}
+                        {% else %}
+                            {{ course.Doctor|join(', ') }}
+                        {% endif %}
+                    </td>
+                    <td class="action-btns">
+                        <!-- Edit Button -->
+                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editCourseModal{{ course._id }}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+
+                        <!-- Delete Form -->
+                        <form action="/delete_course/{{ course._id }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Course Modals -->
+{% for course in courses %}
+<div class="modal fade" id="editCourseModal{{ course._id }}" tabindex="-1" aria-labelledby="editCourseModalLabel{{ course._id }}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/update_course/{{ course._id }}" method="POST">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCourseModalLabel{{ course._id }}">Edit Course: {{ course.title }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" value="{{ course.title }}" required>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col">
+              <label class="form-label">Credits</label>
+              <input type="number" name="credits" class="form-control" value="{{ course.credits }}" required>
+            </div>
+            <div class="col">
+              <label class="form-label">Department</label>
+              <input type="text" name="department" class="form-control" value="{{ course.department }}" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Enrolled Students (comma separated)</label>
+            <input type="text" name="enrolled_students" class="form-control"
+              value="{% if course.enrolled_students is iterable %}{{ course.enrolled_students | join(',') }}{% else %}{{ course.enrolled_students }}{% endif %}">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Professor(s) (comma separated)</label>
+            <input type="text" name="doctor" class="form-control"
+              value="{% if course.Doctor is string %}{{ course.Doctor }}{% else %}{{ course.Doctor | join(',') }}{% endif %}" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function updateSearchForm(type) {
+            if (type === 'students') {
+                document.getElementById('student-search').style.display = 'block';
+                document.getElementById('course-search').style.display = 'none';
+            } else {
+                document.getElementById('student-search').style.display = 'none';
+                document.getElementById('course-search').style.display = 'block';
+            }
+        }
+        
+        // Simple navigation highlighting
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.sidebar a');
+            links.forEach(link => {
+                link.addEventListener('click', function() {
+                    links.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
