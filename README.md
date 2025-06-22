@@ -51,36 +51,36 @@ It supports both a **web interface** and **RESTful APIs** for interacting with t
 
 ---
 
-## 🚀 How to Run Locally
+🚀 How to Run Locally
 
-1. **Make sure you have Python and MongoDB installed** on your machine.
+1. Make sure you have Python and MongoDB installed** on your machine.
 
-2. **Start MongoDB server** (if not already running):
+2. Start MongoDB server** (if not already running):
 
    ```bash
    mongod
 ````
 
-3. **Clone this repo and navigate to the project folder:**
+3. Clone this repo and navigate to the project folder:**
 
    ```bash
    git clone https://github.com/salma-nour-eldeen6/MongoDB-Project.git
    cd MongoDB-Project
    ```
 
-4. **Install required Python packages:**
+4. Install required Python packages:**
 
    ```bash
    pip install flask pymongo
    ```
 
-5. **Run the Flask app:**
+5. Run the Flask app:**
 
    ```bash
    python app.py
    ```
 
-6. **Open your browser and go to:**
+6. Open your browser and go to:**
 
    ```
    http://localhost:5000
